@@ -1,8 +1,10 @@
 <template>
   <Navbar/>
-  <transition name="fade" mode="out-in" appear="true">
-    <router-view/>
-  </transition>
+  <router-view v-slot="{ Component }">
+    <transition name="fade" mode="out-in" appear>
+      <component :is="Component"/>
+    </transition>
+  </router-view>
   <Footer/>
 </template>
 
@@ -14,7 +16,7 @@ export default {
   name: 'App',
   components: {
     Navbar,
-    Footer
+    Footer,
   }
 }
 </script>
@@ -33,6 +35,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>
 

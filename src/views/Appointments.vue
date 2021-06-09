@@ -4,20 +4,20 @@
     <form @submit.prevent="sendRequest" class="row g-3">
       <div class="col-md-6">
         <label for="appointmentDate">Data</label>
-        <input class="form-control" type="date" id="appointmentDate" v-model="requestData.appointmentDate">
+        <input class="form-control" type="date" id="appointmentDate" v-model="request.appointment.date">
       </div>
       <div class="col-md-6">
         <label for="doctorName">Lekarz</label>
-        <select class="form-select" id="doctorName" v-model='requestData.doctorName'>
+        <select class="form-select" id="doctorName" v-model='request.appointment.doctor'>
           <option>1</option>
           <option>2</option>
         </select>
       </div>
       <div class="col-12">
         <div class="btn-group" role="group">
-          <input type="radio" class="btn-check" name="visit-type" id="visit-default" autocomplete="off" v-model='requestData.appointmentType' value="BASIC" checked>
+          <input type="radio" class="btn-check" name="visit-type" id="visit-default" autocomplete="off" v-model='request.appointment.type' value="BASIC" checked>
           <label class="btn btn-outline-primary" for="visit-default">Zwykła</label>
-          <input type="radio" class="btn-check" name="visit-type" id="visit-specialist" autocomplete="off" v-model='requestData.appointmentType' value="SPECIALIST">
+          <input type="radio" class="btn-check" name="visit-type" id="visit-specialist" autocomplete="off" v-model='request.appointment.type' value="SPECIALIST">
           <label class="btn btn-outline-primary" for="visit-specialist">Specjalistyczna</label>
         </div>
         <button class="btn btn-secondary" type="submit">Szukaj</button>
@@ -56,10 +56,12 @@ export default {
   name: 'Appointments',
   data() {
     return {
-      requestData: {
-        appointmentDate: new Date().toISOString().split('T')[0],
-        doctorName: '1',
-        appointmentType: 'BASIC',
+      request: {
+        appointment: {
+          date: new Date().toISOString().split('T')[0],
+          doctor: '1',
+          type: 'BASIC'
+        }
       },
       response: {
         data: {
@@ -70,14 +72,19 @@ export default {
         },
         valid: false,
         visible: false
-      }
+      },
     }
   },
   methods: {
     async sendRequest() {
-      const url = `/appointment/find/?id=${this.requestData.doctorName}&date=${this.requestData.appointmentDate}&type=${this.requestData.appointmentType}`
       try {
-        const response = await axios.get(url)
+        const response = await axios.get('/appointment/find/', { 
+          params: { 
+            id: this.request.appointment.doctor, 
+            date: this.request.appointment.date, 
+            type: this.request.appointment.type 
+          } 
+        })
         this.response.data = response.data
         this.response.valid = this.response.data.appointments.length > 0
       } catch(error) {
@@ -88,13 +95,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s ease;
-  }
-
-  .fade-enter-from, .fade-leave-to {
-    opacity: 0;
-  }
-</style>

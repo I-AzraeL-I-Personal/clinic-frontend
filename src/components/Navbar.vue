@@ -14,7 +14,7 @@
             <router-link class="nav-link active" current="page" to="/appoint">Wizyty</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
+            <router-link class="nav-link active" current="page" to="/register">Rejestracja</router-link>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" expanded="false">
@@ -34,6 +34,6 @@
 
 <script>
 export default {
-  name: 'Header'
+  name: 'Header',
 }
 </script>
