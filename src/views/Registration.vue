@@ -3,12 +3,12 @@
     <h2 class="text-left">Zarejestruj się</h2>
     <form @submit.prevent="sendRequest" class="row g-3">
       <div class="col-md-6 form-floating">
-        <input class="form-control" type="text" id="email" v-model="request.registerUser.email">
+        <input class="form-control" type="text" v-model="request.registerUser.email">
         <label for="email">E-mail</label>
       </div>
       <div class="col-md-6 form-floating">
         <input class="form-control" type="password" id="password" v-model="request.registerUser.password">
-        <label for="appointmentDate">Hasło</label>
+        <label for="password">Hasło</label>
       </div>
       <div class="col-md-4 form-floating">
         <input class="form-control" type="text" id="firstName" v-model="request.register.firstName">
@@ -54,10 +54,12 @@
         <label for="houseNum">Nr. mieszkania</label>
       </div>
       <div class="col-md-4 form-floating">
-        <input class="form-control" type="text" id="voivodeship" v-model="request.register.contactDto.voivodeshipDto.id">
+        <select class="form-control" id="voivodeship" v-model="request.register.contactDto.voivodeshipDto.id">
+          <option v-for="voivodeship in voivodeshipDto" :key="voivodeship.id" :value="voivodeship.id">{{ voivodeship.voivodeshipName }}</option>
+        </select>
         <label for="voivodeship">Województwo</label>
       </div>
-      <div class="col-md-12">
+      <div class="col-md-12" hidden=true>
         <div class="btn-group" role="group">
           <input type="radio" class="btn-check" id="role-patient" autocomplete="off" v-model='request.registerUser.role' value="patient" checked>
           <label class="btn btn-outline-secondary" for="role-patient">Pacjent</label>
@@ -76,8 +78,14 @@
 import axios from 'axios'
 export default {
   name: 'Registration',
+  created() {
+    this.fetchVoivodeships()
+  },
   data() {
     return {
+      voivodeshipDto: [
+        { id: '', voivodeshipName: '' }
+      ],
       request: {
         registerUser: {
           email: '',
@@ -91,30 +99,18 @@ export default {
           lastName: '',
           birthDate: new Date().toISOString().split('T')[0],
           pesel: '',
-          gender: 'MALE',
+          gender: '',
           contactDto: {
             phoneNumber: '',
             voivodeshipDto: {
-              id: 1
+              id: ''
             },
             city: '',
             street: '',
             houseNum: ''
           }
         }
-      },
-      response: {
-        registerUser: {
-          token: '',
-          userUUID: '',
-          email: '',
-          role: ''
-        },
-        register: {
-          id: '',
-          patientUUID: ''
-        }
-      },
+      }
     }
   },
   methods: {
@@ -128,12 +124,19 @@ export default {
         }
         this.request.register.patientUUID = responseData.userUUID
         const response2 = await axios.post('/patient/', this.request.register, config)
-        console.log(response2.data)
+      } catch(error) {
+        console.log(error)
+      }
+    },
+    async fetchVoivodeships() {
+      try {
+        const response = await axios.get('/patient/voivodeships/')
+        this.voivodeshipDto = response.data
       } catch(error) {
         console.log(error)
       }
     }
-  }
+  },
 }
 </script>
 

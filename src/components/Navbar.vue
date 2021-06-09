@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="#">Moja przychodnia</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" controls="navbarNavDropdown" expanded="false">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -16,9 +16,12 @@
           <li class="nav-item">
             <router-link class="nav-link active" current="page" to="/register">Rejestracja</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" current="page" to="/login">Logowanie</router-link>
+          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" expanded="false">
-              Dropdown link
+              Konto
             </a>
             <ul class="dropdown-menu" labelledby="navbarDropdownMenuLink">
               <li><a class="dropdown-item" href="#">Action</a></li>
