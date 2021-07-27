@@ -1,74 +1,84 @@
 <template>
   <div class="container">
     <h2 class="text-left">Zarejestruj się</h2>
-    <form @submit.prevent="sendRequest" class="row g-3">
-      <div class="col-md-6 form-floating">
-        <input class="form-control" type="text" v-model="request.registerUser.email">
-        <label for="email">E-mail</label>
-      </div>
-      <div class="col-md-6 form-floating">
-        <input class="form-control" type="password" id="password" v-model="request.registerUser.password">
-        <label for="password">Hasło</label>
-      </div>
-      <div class="col-md-4 form-floating">
-        <input class="form-control" type="text" id="firstName" v-model="request.register.firstName">
-        <label for="firstName">Imię</label>
-      </div>
-      <div class="col-md-4 form-floating">
-        <input class="form-control" type="text" id="middleName" v-model="request.register.middleName">
-        <label for="middleName">Drugie imię</label>
-      </div>
-      <div class="col-md-4 form-floating">
-        <input class="form-control" type="text" id="lastName" v-model="request.register.lastName">
-        <label for="lastName">Nazwisko</label>
-      </div>
-      <div class="col-md-3 form-floating">
-        <input class="form-control" type="text" id="pesel" v-model="request.register.pesel">
-        <label for="pesel">PESEL</label>
-      </div>
-      <div class="col-md-3 form-floating">
-        <input class="form-control" type="date" id="birthDate" v-model="request.register.birthDate">
-        <label for="birthDate">Data urodzenia</label>
-      </div>
-      <div class="col-md-3 form-floating">
-        <select class="form-select" id="gender" v-model='request.register.gender'>
-          <option selected value="MALE">Mężczyzna</option>
-          <option value="FEMALE">Kobieta</option>
-        </select>
-        <label for="gender">Płeć</label>
-      </div>
-      <div class="col-md-12 form-floating">
-        <input class="form-control" type="text" id="phoneNumber" v-model="request.register.contactDto.phoneNumber">
-        <label for="phoneNumber">Nr. telefonu</label>
-      </div>
-      <div class="col-md-3 form-floating">
-        <input class="form-control" type="text" id="city" v-model="request.register.contactDto.city">
-        <label for="city">Miasto</label>
-      </div>
-      <div class="col-md-3 form-floating">
-        <input class="form-control" type="text" id="street" v-model="request.register.contactDto.street">
-        <label for="street">Ulica</label>
-      </div>
-      <div class="col-md-2 form-floating">
-        <input class="form-control" type="text" id="houseNum" v-model="request.register.contactDto.houseNum">
-        <label for="houseNum">Nr. mieszkania</label>
-      </div>
-      <div class="col-md-4 form-floating">
-        <select class="form-control" id="voivodeship" v-model="request.register.contactDto.voivodeshipDto.id">
-          <option v-for="voivodeship in voivodeshipDto" :key="voivodeship.id" :value="voivodeship.id">{{ voivodeship.voivodeshipName }}</option>
-        </select>
-        <label for="voivodeship">Województwo</label>
-      </div>
-      <div class="col-md-12" hidden=true>
-        <div class="btn-group" role="group">
-          <input type="radio" class="btn-check" id="role-patient" autocomplete="off" v-model='request.registerUser.role' value="patient" checked>
-          <label class="btn btn-outline-secondary" for="role-patient">Pacjent</label>
-          <input type="radio" class="btn-check" id="role-doctor" autocomplete="off" v-model='request.registerUser.role' value="doctor">
-          <label class="btn btn-outline-secondary" for="role-doctor">Lekarz</label>
+    <form @submit.prevent="sendRequest" div class="w-50">
+      <fieldset>
+        <legend class="h5">Dane logowania</legend>
+        <hr>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" v-model="request.registerUser.email">
+          <label for="email">E-mail</label>
         </div>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="password" id="password" v-model="request.registerUser.password">
+          <label for="password">Hasło</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend class="h5">Dane osobowe</legend>
+        <hr>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" id="firstName" v-model="request.register.firstName">
+          <label for="firstName">Imię</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" id="middleName" v-model="request.register.middleName">
+          <label for="middleName">Drugie imię</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" id="lastName" v-model="request.register.lastName">
+          <label for="lastName">Nazwisko</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" id="pesel" v-model="request.register.pesel">
+          <label for="pesel">PESEL</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="date" id="birthDate" v-model="request.register.birthDate">
+          <label for="birthDate">Data urodzenia</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <select class="form-select" id="gender" v-model='request.register.gender'>
+            <option selected value="MALE">Mężczyzna</option>
+            <option value="FEMALE">Kobieta</option>
+          </select>
+          <label for="gender">Płeć</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend class="h5">Dane kontaktowe</legend>
+        <hr>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" id="phoneNumber" v-model="request.register.contactDto.phoneNumber">
+          <label for="phoneNumber">Nr. telefonu</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" id="city" v-model="request.register.contactDto.city">
+          <label for="city">Miasto</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" id="street" v-model="request.register.contactDto.street">
+          <label for="street">Ulica</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <input class="form-control" type="text" id="houseNum" v-model="request.register.contactDto.houseNum">
+          <label for="houseNum">Nr. mieszkania</label>
+        </div>
+        <div class="mb-3 form-floating">
+          <select class="form-control" id="voivodeship" v-model="request.register.contactDto.voivodeshipDto.id">
+            <option v-for="voivodeship in voivodeshipDto" :key="voivodeship.id" :value="voivodeship.id">{{ voivodeship.voivodeshipName }}</option>
+          </select>
+          <label for="voivodeship">Województwo</label>
+        </div>
+      </fieldset>
+      <div class="btn-group mb-3" role="group">
+        <input type="radio" class="btn-check" id="role-patient" autocomplete="off" v-model='request.registerUser.role' value="patient" checked>
+        <label class="btn btn-outline-secondary" for="role-patient">Pacjent</label>
+        <input type="radio" class="btn-check" id="role-doctor" autocomplete="off" v-model='request.registerUser.role' value="doctor">
+        <label class="btn btn-outline-secondary" for="role-doctor">Lekarz</label>
       </div>
-      <div class="col-auto">
-      <button class="btn btn-primary" type="submit">Zarejestruj</button>
+      <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Zarejestruj</button>
       </div>
     </form>
   </div>
@@ -139,4 +149,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+  .container {
+    padding-bottom: 60px;
+  }
+</style>
 

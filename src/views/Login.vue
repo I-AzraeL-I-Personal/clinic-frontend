@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2 class="text-left">Zaloguj się</h2>
-    <form @submit.prevent="sendRequest" class="row g-3">
+    <form @submit.prevent="sendRequest" class="row g-3 w-50">
       <div class="col-md-12 form-floating">
         <input class="form-control" type="text" id="email" v-model="request.login.email">
         <label for="email">E-mail</label>
