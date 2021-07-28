@@ -65,7 +65,7 @@
           <label for="houseNum">Nr. mieszkania</label>
         </div>
         <div class="mb-3 form-floating">
-          <select class="form-control" id="voivodeship" v-model="request.register.contactDto.voivodeshipDto.id">
+          <select class="form-select" id="voivodeship" v-model="request.register.contactDto.voivodeshipDto.id">
             <option v-for="voivodeship in voivodeshipDto" :key="voivodeship.id" :value="voivodeship.id">{{ voivodeship.voivodeshipName }}</option>
           </select>
           <label for="voivodeship">Województwo</label>
