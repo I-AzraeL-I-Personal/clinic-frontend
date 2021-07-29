@@ -34,8 +34,7 @@ export default {
       request: {
         login: {
           email: '',
-          password: '',
-          role: 'patient'
+          password: ''
         },
       }
     }
@@ -44,10 +43,13 @@ export default {
     async sendRequest() {
       try {
         const response = await axios.post('/auth/login/', this.request.login)
-        const responseData = response.data
-        console.log(response.data)
+        this.$store.commit('setUserData', response.data)
       } catch(error) {
-        console.log(error)
+        this.$notify({
+          title: 'Informacja',
+          text: 'Niepoprawne dane logowania lub konto oczekuje na aktywację.',
+          type: 'error'
+        })
       }
     },
   },

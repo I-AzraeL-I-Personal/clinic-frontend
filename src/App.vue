@@ -1,5 +1,6 @@
 <template>
   <Navbar/>
+  <notifications position="top center" width="25%"/>
   <router-view v-slot="{ Component }">
     <transition name="fade" mode="out-in" appear>
       <component :is="Component"/>
@@ -17,7 +18,8 @@ export default {
   components: {
     Navbar,
     Footer,
-  }
+  },
+  
 }
 </script>
 

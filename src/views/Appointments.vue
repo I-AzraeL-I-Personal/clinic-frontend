@@ -2,16 +2,15 @@
   <div class="container">
     <h2 class="text-left">Wyszukaj wizytę</h2>
     <form @submit.prevent="sendRequest" class="row g-3">
-      <div class="col-md-6">
-        <label for="appointmentDate">Data</label>
+      <div class="col-md-6 form-floating">
         <input class="form-control" type="date" id="appointmentDate" v-model="request.appointment.date">
+        <label for="appointmentDate">Data</label>
       </div>
-      <div class="col-md-6">
-        <label for="doctorName">Lekarz</label>
+      <div class="col-md-6 form-floating">
         <select class="form-select" id="doctorName" v-model='request.appointment.doctor'>
-          <option>1</option>
-          <option>2</option>
+          <option v-for="doctor in doctorDto" :key="doctor.doctorUUID" :value="doctor.doctorUUID">{{ `dr ${doctor.firstName} ${doctor.middleName} ${doctor.lastName}` }}</option>
         </select>
+        <label for="doctorName">Lekarz</label>
       </div>
       <div class="col-12">
         <div class="btn-group" role="group">
@@ -54,12 +53,18 @@
 import axios from 'axios'
 export default {
   name: 'Appointments',
+  created() {
+    this.fetchBasicDoctorsData()
+  },
   data() {
     return {
+      doctorDto: [
+        { doctorUUID: '', firstName: '', middleName: '', lastName: '' }
+      ],
       request: {
         appointment: {
           date: new Date().toISOString().split('T')[0],
-          doctor: '1',
+          doctor: '',
           type: 'BASIC'
         }
       },
@@ -78,9 +83,9 @@ export default {
   methods: {
     async sendRequest() {
       try {
-        const response = await axios.get('/appointment/find/', { 
+        const response = await axios.get('/appointment/find', { 
           params: { 
-            id: this.request.appointment.doctor, 
+            doctorUUID: this.request.appointment.doctor, 
             date: this.request.appointment.date, 
             type: this.request.appointment.type 
           } 
@@ -91,6 +96,15 @@ export default {
         this.response.valid = false
       }
       this.response.visible = true
+    },
+    async fetchBasicDoctorsData() {
+      try {
+        const response = await axios.get('/doctor/')
+        this.doctorDto = response.data
+        console.log(response.data)
+      } catch(error) {
+        console.log(error)
+      }
     }
   }
 }

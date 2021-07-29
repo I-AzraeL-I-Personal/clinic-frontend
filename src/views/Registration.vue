@@ -133,6 +133,7 @@ export default {
           headers: { Authorization: responseData.token }
         }
         this.request.register.patientUUID = responseData.userUUID
+
         const response2 = await axios.post('/patient/', this.request.register, config)
       } catch(error) {
         console.log(error)
