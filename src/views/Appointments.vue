@@ -109,3 +109,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .container {
+    padding-bottom: 60px;
+  }
+</style>
