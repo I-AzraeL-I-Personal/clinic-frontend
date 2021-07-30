@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2 class="text-left">Wyszukaj wizytę</h2>
-    <form @submit.prevent="sendRequest" class="row g-3">
+    <form @submit.prevent="sendFindRequest" class="row g-3">
       <div class="col-md-6 form-floating">
         <input class="form-control" type="date" id="appointmentDate" v-model="request.appointment.date">
         <label for="appointmentDate">Data</label>
@@ -40,7 +40,7 @@
               <th scope="row">{{ index }}</th>
               <td>{{ appointment.start }}</td>
               <td>{{ appointment.end }}</td>
-              <td><button class="btn btn-primary" type="submit">Zapisz się</button></td>
+              <td><button class="btn btn-primary" @click="sendMakeAppointmentRequest(appointment.start)">Zapisz się</button></td>
             </tr>
           </tbody>
         </table>
@@ -81,7 +81,7 @@ export default {
     }
   },
   methods: {
-    async sendRequest() {
+    async sendFindRequest() {
       try {
         const response = await axios.get('/appointment/find', { 
           params: { 
@@ -97,11 +97,34 @@ export default {
       }
       this.response.visible = true
     },
+    async sendMakeAppointmentRequest(appointmentStartHour) {
+      try {
+        const request = {
+          date: this.request.appointment.date,
+          startHour: appointmentStartHour,
+          type: this.request.appointment.type,
+          patientUUID: this.$store.state.userData.userUUID,
+          doctorUUID: this.request.appointment.doctor
+        }
+        await axios.post('/appointment/', request)
+        this.response.visible = false
+        this.$notify({
+          title: 'Informacja',
+          text: 'Pomyślnie dokonano rezerwacji.',
+          type: 'success'
+        })
+      } catch(error) {
+        this.$notify({
+          title: 'Informacja',
+          text: 'Nie udało się wykonać rezerwacji.',
+          type: 'error'
+        })
+      }
+    },
     async fetchBasicDoctorsData() {
       try {
         const response = await axios.get('/doctor/')
         this.doctorDto = response.data
-        console.log(response.data)
       } catch(error) {
         console.log(error)
       }

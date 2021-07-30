@@ -10,14 +10,17 @@
           <li class="nav-item">
             <router-link class="nav-link active" current="page" to="/">Strona główna</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="this.$store.state?.userData?.token">
             <router-link class="nav-link active" current="page" to="/appoint">Wizyty</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="!this.$store.state?.userData?.token">
             <router-link class="nav-link active" current="page" to="/register">Rejestracja</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="!this.$store.state?.userData?.token">
             <router-link class="nav-link active" current="page" to="/login">Logowanie</router-link>
+          </li>
+          <li class="nav-item" v-if="this.$store.state?.userData?.token">
+            <a class="nav-link active" href="#" @click="logout">Wyloguj</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" expanded="false">
@@ -36,7 +39,29 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'Header',
+  methods: {
+    async logout() {
+      try {
+        await axios.post('/auth/logout')
+        this.$notify({
+          title: 'Informacja',
+          text: 'Wylogowano.',
+          type: 'success'
+        })
+        const userData = { email: '', role: '', token: '', userUUID: '' }
+        this.$store.commit('setUserData', userData)
+        this.$router.push('/')
+      } catch(error) {
+        this.$notify({
+          title: 'Informacja',
+          text: 'Błąd.',
+          type: 'error'
+        })
+      }
+    }
+  }
 }
 </script>

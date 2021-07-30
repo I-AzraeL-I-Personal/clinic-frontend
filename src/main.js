@@ -25,6 +25,9 @@ axios.defaults.baseURL = process.env.VUE_APP_APIURL
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.interceptors.request.use(
   function(config) {
+    if (!store.state.userData) {
+      store.commit('setUserData', { email: '', role: '', token: '', userUUID: '' })
+    }
     const token = store.state.userData.token
     if (token) {
       config.headers["Authorization"] = token;
