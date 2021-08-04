@@ -104,7 +104,7 @@ export default {
           startHour: appointmentStartHour,
           type: this.request.appointment.type,
           patientUUID: this.$store.state.userData.userUUID,
-          doctorUUID: this.request.appointment.doctor
+          doctorDto: { doctorUUID: this.request.appointment.doctor }
         }
         await axios.post('/appointment/', request)
         this.response.visible = false

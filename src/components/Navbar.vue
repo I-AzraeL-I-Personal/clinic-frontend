@@ -22,14 +22,12 @@
           <li class="nav-item" v-if="this.$store.state?.userData?.token">
             <a class="nav-link active" href="#" @click="logout">Wyloguj</a>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" v-if="this.$store.state?.userData?.token">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" expanded="false">
               Konto
             </a>
             <ul class="dropdown-menu" labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><router-link class="dropdown-item" current="page" to="/user-appointments">Moje wizyty</router-link></li>
             </ul>
           </li>
         </ul>
