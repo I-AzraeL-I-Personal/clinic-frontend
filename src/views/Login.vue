@@ -44,18 +44,10 @@ export default {
       try {
         const response = await axios.post('/auth/login/', this.request.login)
         this.$store.commit('setUserData', response.data)
-        this.$notify({
-          title: 'Informacja',
-          text: 'Zalogowano.',
-          type: 'success'
-        })
+        this.showSuccess('Zalogowano.')
         this.$router.push('/')
       } catch(error) {
-        this.$notify({
-          title: 'Informacja',
-          text: 'Niepoprawne dane logowania lub konto oczekuje na aktywację.',
-          type: 'error'
-        })
+        this.showError('Niepoprawne dane logowania lub konto oczekuje na aktywację.')
       }
     },
   },

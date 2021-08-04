@@ -21,6 +21,25 @@ const store = createStore({
   plugins: [createPersistedState()]
 })
 
+const notificationMixin = {
+  methods: {
+    showSuccess(message) {
+      this.$notify({
+        title: 'Informacja',
+        text: message,
+        type: 'success'
+      })
+    },
+    showError(message) {
+      this.$notify({
+        title: 'Informacja',
+        text: message,
+        type: 'error'
+      })
+    }
+  }
+}
+
 axios.defaults.baseURL = process.env.VUE_APP_APIURL
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.interceptors.request.use(
@@ -44,4 +63,5 @@ createApp(App)
   .use(store)
   .use(router)
   .use(VueAxios, axios)
+  .mixin(notificationMixin)
   .mount('#app')

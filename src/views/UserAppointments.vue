@@ -68,11 +68,7 @@ export default {
         this.isResponseValid = true
       } catch(error) {
         this.isResponseValid = false
-        this.$notify({
-          title: 'Informacja',
-          text: 'Nie udało się pobrać danych dotyczących rezerwacji.',
-          type: 'error'
-        })
+        this.showError('Nie udało się pobrać danych dotyczących rezerwacji.')
       }
     },
   }

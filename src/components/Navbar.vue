@@ -44,20 +44,12 @@ export default {
     async logout() {
       try {
         await axios.post('/auth/logout')
-        this.$notify({
-          title: 'Informacja',
-          text: 'Wylogowano.',
-          type: 'success'
-        })
+        this.showSuccess('Wylogowano.')
         const userData = { email: '', role: '', token: '', userUUID: '' }
         this.$store.commit('setUserData', userData)
         this.$router.push('/')
       } catch(error) {
-        this.$notify({
-          title: 'Informacja',
-          text: 'Błąd.',
-          type: 'error'
-        })
+        this.showError('Błąd.')
       }
     }
   }

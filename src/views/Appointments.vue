@@ -108,17 +108,9 @@ export default {
         }
         await axios.post('/appointment/', request)
         this.response.visible = false
-        this.$notify({
-          title: 'Informacja',
-          text: 'Pomyślnie dokonano rezerwacji.',
-          type: 'success'
-        })
+        this.showSuccess('Pomyślnie dokonano rezerwacji.')
       } catch(error) {
-        this.$notify({
-          title: 'Informacja',
-          text: 'Nie udało się wykonać rezerwacji.',
-          type: 'error'
-        })
+        this.showError('Nie udało się wykonać rezerwacji.')
       }
     },
     async fetchBasicDoctorsData() {
