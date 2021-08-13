@@ -28,6 +28,7 @@
             </a>
             <ul class="dropdown-menu" labelledby="navbarDropdownMenuLink">
               <li><router-link class="dropdown-item" current="page" to="/user-appointments">Moje wizyty</router-link></li>
+              <li><router-link class="dropdown-item" current="page" to="/user-data">Moje konto</router-link></li>
             </ul>
           </li>
         </ul>

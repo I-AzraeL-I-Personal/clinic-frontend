@@ -4,6 +4,7 @@ import Appointments from '../views/Appointments.vue'
 import Registration from '../views/Registration.vue'
 import Login from '../views/Login.vue'
 import UserAppointments from '../views/UserAppointments.vue'
+import UserData from '../views/UserData.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/user-appointments',
     name: 'UserAppointments',
     component: UserAppointments
+  },
+  {
+    path: '/user-data',
+    name: 'UserData',
+    component: UserData
   }
 ]
 

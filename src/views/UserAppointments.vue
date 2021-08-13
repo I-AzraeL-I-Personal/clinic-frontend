@@ -54,7 +54,7 @@ export default {
     filterAppointments() {
       const dateNow = new Date()
       if (this.selectedView === 'future') {
-        return this.appointments.filter(appointment => new Date(appointment.date + ' ' + appointment.startHour) >= dateNow)
+        return this.appointments.filter(appointment => new Date(appointment.date + ' ' + appointment.startHour) >= dateNow).reverse()
       } else if (this.selectedView === 'past') {
         return this.appointments.filter(appointment => new Date(appointment.date + ' ' + appointment.startHour) < dateNow)
       }
