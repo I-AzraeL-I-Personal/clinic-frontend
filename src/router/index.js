@@ -5,6 +5,7 @@ import Registration from '../views/Registration.vue'
 import Login from '../views/Login.vue'
 import UserAppointments from '../views/UserAppointments.vue'
 import UserData from '../views/UserData.vue'
+import AdminPanel from '../views/AdminPanel.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/user-data',
     name: 'UserData',
     component: UserData
+  },
+  {
+    path: '/admin-panel',
+    name: 'AdminPanel',
+    component: AdminPanel
   }
 ]
 

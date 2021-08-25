@@ -29,6 +29,7 @@
             <ul class="dropdown-menu" labelledby="navbarDropdownMenuLink">
               <li><router-link class="dropdown-item" current="page" to="/user-appointments">Moje wizyty</router-link></li>
               <li><router-link class="dropdown-item" current="page" to="/user-data">Moje konto</router-link></li>
+              <li v-if="this.$store.state?.userData?.role === 'system_admin'"><router-link class="dropdown-item" current="page" to="/admin-panel">Panel admina</router-link></li>
             </ul>
           </li>
         </ul>
