@@ -1,17 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
 import Appointments from '../views/Appointments.vue'
 import Registration from '../views/Registration.vue'
 import Login from '../views/Login.vue'
 import UserAppointments from '../views/UserAppointments.vue'
 import UserData from '../views/UserData.vue'
 import AdminPanel from '../views/AdminPanel.vue'
+import About from '../views/About.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: '/about'
   },
   {
     path: '/appoint',
@@ -42,7 +41,12 @@ const routes = [
     path: '/admin-panel',
     name: 'AdminPanel',
     component: AdminPanel
-  }
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About
+  },
 ]
 
 const router = createRouter({

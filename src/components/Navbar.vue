@@ -7,20 +7,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          <li class="nav-item">
-            <router-link class="nav-link active" current="page" to="/">Strona główna</router-link>
-          </li>
           <li class="nav-item" v-if="this.$store.state?.userData?.token">
             <router-link class="nav-link active" current="page" to="/appoint">Wizyty</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link active" current="page" to="/about">O nas</router-link>
           </li>
           <li class="nav-item" v-if="!this.$store.state?.userData?.token">
             <router-link class="nav-link active" current="page" to="/register">Rejestracja</router-link>
           </li>
           <li class="nav-item" v-if="!this.$store.state?.userData?.token">
             <router-link class="nav-link active" current="page" to="/login">Logowanie</router-link>
-          </li>
-          <li class="nav-item" v-if="this.$store.state?.userData?.token">
-            <a class="nav-link active" href="#" @click="logout">Wyloguj</a>
           </li>
           <li class="nav-item dropdown" v-if="this.$store.state?.userData?.token">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" expanded="false">
@@ -31,6 +28,9 @@
               <li><router-link class="dropdown-item" current="page" to="/user-data">Moje konto</router-link></li>
               <li v-if="this.$store.state?.userData?.role === 'system_admin'"><router-link class="dropdown-item" current="page" to="/admin-panel">Panel admina</router-link></li>
             </ul>
+          </li>
+          <li class="nav-item" v-if="this.$store.state?.userData?.token">
+            <a class="nav-link active" href="#" @click="logout">Wyloguj</a>
           </li>
         </ul>
       </div>
