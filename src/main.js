@@ -7,6 +7,7 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap"
 
 const store = createStore({

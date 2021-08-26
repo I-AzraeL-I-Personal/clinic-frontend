@@ -47,7 +47,16 @@ export default {
         this.showSuccess('Zalogowano.')
         this.$router.push('/')
       } catch(error) {
-        this.showError('Niepoprawne dane logowania lub konto oczekuje na aktywację.')
+        switch (error.response.status) {
+          case 401:
+            this.showError('Niepoprawne dane logowania.')
+            break
+          case 403:
+            this.showError('Konto oczekuje na aktywację.')
+            break
+          default:
+            this.showError('Błąd serwera: ' + error.response.status)
+        }
       }
     },
   },

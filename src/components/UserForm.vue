@@ -70,12 +70,6 @@
         <label for="voivodeship">Województwo</label>
       </div>
     </fieldset>
-    <div class="btn-group mb-3" role="group">
-      <input type="radio" class="btn-check" id="role-patient" autocomplete="off" v-model='request.registerUser.role' value="patient" checked>
-      <label class="btn btn-outline-secondary" for="role-patient">Pacjent</label>
-      <input type="radio" class="btn-check" id="role-doctor" autocomplete="off" v-model='request.registerUser.role' value="doctor">
-      <label class="btn btn-outline-secondary" for="role-doctor">Lekarz</label>
-    </div>
     <div class="mb-3">
       <button class="btn btn-primary" type="submit">{{ submitText }}</button>
     </div>
@@ -89,6 +83,10 @@ export default {
   props: {
     title: String,
     submitText: String,
+    userRole: {
+      type: String,
+      default: ''
+    },
     userData: {
       type: Object,
       default() {
@@ -122,6 +120,9 @@ export default {
   },
   created() {
     this.fetchVoivodeships()
+    if (this.userRole) {
+      this.request.registerUser.role = this.userRole
+    }
   },
   data() {
     return {

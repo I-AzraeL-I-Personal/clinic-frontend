@@ -118,7 +118,7 @@ export default {
         const response = await axios.get('/doctor/')
         this.doctorDto = response.data
       } catch(error) {
-        console.log(error)
+        this.showError('Błąd serwera: ' + error.response.status)
       }
     }
   }
