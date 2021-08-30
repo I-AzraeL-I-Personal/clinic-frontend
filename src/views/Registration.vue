@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <UserForm title="Zarejestruj się" submitText="Zarejestruj"/>
+    <PatientForm title="Zarejestruj się" submitText="Zarejestruj" type="create"/>
   </div>
 </template>
 
 <script>
-import UserForm from '../components/UserForm.vue'
+import PatientForm from '../components/PatientForm.vue'
 export default {
   name: 'Registration',
   components: {
-    UserForm,
+    PatientForm,
   },
 }
 </script>

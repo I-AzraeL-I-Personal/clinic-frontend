@@ -43,6 +43,10 @@
         </select>
         <label for="gender">Płeć</label>
       </div>
+      <div class="mb-3 form-floating">
+        <input class="form-control" type="date" id="employmentDate" v-model="request.register.employmentDate">
+        <label for="employmentDate">Data zatrudnienia</label>
+      </div>
     </fieldset>
     <fieldset>
       <legend class="h5">Dane kontaktowe</legend>
@@ -79,14 +83,11 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'UserForm',
+  name: 'DoctorForm',
   props: {
     title: String,
     submitText: String,
-    userRole: {
-      type: String,
-      default: ''
-    },
+    type: String,
     userData: {
       type: Object,
       default() {
@@ -94,14 +95,15 @@ export default {
           registerUser: {
             email: '',
             password: '',
-            role: 'patient'
+            role: 'doctor'
           },
           register: {
-            patientUUID: '',
+            doctorUUID: '',
             firstName: '',
             middleName: '',
             lastName: '',
             birthDate: new Date().toISOString().split('T')[0],
+            employmentDate: new Date().toISOString().split('T')[0],
             pesel: '',
             gender: '',
             contactDto: {
@@ -120,9 +122,6 @@ export default {
   },
   created() {
     this.fetchVoivodeships()
-    if (this.userRole) {
-      this.request.registerUser.role = this.userRole
-    }
   },
   data() {
     return {
@@ -135,22 +134,25 @@ export default {
   methods: {
     async sendRequest() {
       try {
+        if (this.type === 'create') {
         const response = await axios.post('/auth/users/', this.request.registerUser)
         const responseData = response.data
 
-        const config = {
-          headers: { Authorization: responseData.token }
-        }
-        this.request.register.patientUUID = responseData.userUUID
+        const config = { headers: { Authorization: responseData.token } }
+        this.request.register.doctorUUID = responseData.userUUID
 
-        const response2 = await axios.post('/patient/', this.request.register, config)
+        const response2 = await axios.post(`/doctor/`, this.request.register, config)
+        } else if (this.type === 'update') {
+          await axios.patch('/auth/users/' + this.$store.state.userData.userUUID, this.request.registerUser)
+          await axios.put('/doctor/' + this.$store.state.userData.userUUID, this.request.register)
+        }
       } catch(error) {
         console.log(error)
       }
     },
     async fetchVoivodeships() {
       try {
-        const response = await axios.get('/patient/voivodeships/')
+        const response = await axios.get('/doctor/voivodeships/')
         this.voivodeshipDto = response.data
       } catch(error) {
         console.log(error)

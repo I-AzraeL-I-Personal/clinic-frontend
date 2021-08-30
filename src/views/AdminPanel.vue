@@ -30,17 +30,17 @@
         </tr>
       </tbody>
     </table>
-    <UserForm title="" submitText="Dodaj" userRole="doctor" v-if="selectedView === 'add-doctor'"/>
+    <DoctorForm title="" submitText="Dodaj" type="create" v-if="selectedView === 'add-doctor'"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import UserForm from '../components/UserForm.vue'
+import DoctorForm from '../components/DoctorForm.vue'
 export default {
   name: 'AdminPanel',
   components: {
-    UserForm
+    DoctorForm
   },
   created() {
     this.fetchNotEnabledUsers()

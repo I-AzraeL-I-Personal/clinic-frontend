@@ -1,16 +1,21 @@
 <template>
   <div class="container">
-    <UserForm title="Dane użytkownika" submitText="Aktualizuj" :userData="responseData" v-if="responseData"/>
+    <div id="form-type" v-if="responseData">
+      <PatientForm title="Dane użytkownika" submitText="Aktualizuj" :userData="responseData" type="update" v-if="responseData.registerUser.role === 'patient'"/>
+      <DoctorForm title="Dane użytkownika" submitText="Aktualizuj" :userData="responseData" type="update" v-if="responseData.registerUser.role === 'doctor'"/>
+    </div>
   </div>
 </template>
 
 <script>
-import UserForm from '../components/UserForm.vue'
+import PatientForm from '../components/PatientForm.vue'
+import DoctorForm from '../components/DoctorForm.vue'
 import axios from 'axios'
 export default {
   name: 'UserData',
   components: {
-    UserForm,
+    PatientForm,
+    DoctorForm
   },
   created() {
     this.fetchUserData()
@@ -23,7 +28,7 @@ export default {
   methods: {
     async fetchUserData() {
       try {
-        const response = await axios.get('/patient/' + this.$store.state.userData.userUUID)
+        const response = await axios.get(`/${this.$store.state.userData.role}/` + this.$store.state.userData.userUUID)
         this.responseData = {
           registerUser: { 
             email: this.$store.state.userData.email, 
