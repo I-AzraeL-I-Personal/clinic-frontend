@@ -6,6 +6,7 @@ import UserAppointments from '../views/UserAppointments.vue'
 import UserData from '../views/UserData.vue'
 import AdminPanel from '../views/AdminPanel.vue'
 import About from '../views/About.vue'
+import AppointmentDetails from '../components/AppointmentDetails.vue'
 
 const routes = [
   {
@@ -46,6 +47,12 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/appointment-details',
+    name: 'AppointmentDetails',
+    component: AppointmentDetails,
+    props: route => Object.assign({}, route.query, route.params)
   },
 ]
 

@@ -110,7 +110,7 @@ export default {
         this.response.visible = false
         this.showSuccess('Pomyślnie dokonano rezerwacji.')
       } catch(error) {
-        this.showError('Nie udało się wykonać rezerwacji.')
+        this.showError('Nie udało się wykonać rezerwacji: ' + error.response.status)
       }
     },
     async fetchBasicDoctorsData() {

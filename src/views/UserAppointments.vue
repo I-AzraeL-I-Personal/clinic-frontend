@@ -26,7 +26,7 @@
             <td>{{ appointment.endHour }}</td>
             <td>{{ appointment.type == 'BASIC' ? 'Zwykła' : 'Specjalistyczna' }}</td>
             <td>{{ `dr ${appointment.doctorDto.firstName} ${appointment.doctorDto.middleName} ${appointment.doctorDto.lastName}` }}</td>
-            <td><button class="btn btn-primary" @click="x">Szczegóły</button></td>
+            <td><button class="btn btn-primary" @click="redirectToDetails(appointment.id)">Szczegóły</button></td>
           </tr>
         </tbody>
       </table>
@@ -63,14 +63,23 @@ export default {
   methods: {
     async fetchUserAppointments() {
       try {
-        const response = await axios.get('/appointment/user/' + this.$store.state.userData.userUUID)
+        const response = await axios.get(`/appointment/${this.$store.state.userData.role}/${this.$store.state.userData.userUUID}`)
         this.appointments = response.data
         this.isResponseValid = true
       } catch(error) {
         this.isResponseValid = false
-        this.showError('Nie udało się pobrać danych dotyczących rezerwacji.')
+        this.showError('Nie udało się pobrać danych dotyczących rezerwacji: ' + error.response.status)
       }
     },
+    redirectToDetails(appointmentId) {
+      this.$router.push({ 
+        name: 'AppointmentDetails', 
+        query: { 
+          appointmentId: appointmentId, 
+          patientUUID: this.$store.state.userData.userUUID 
+        } 
+      })
+    }
   }
 }
 </script>

@@ -63,7 +63,7 @@ export default {
       } catch(error) {
         console.log(error)
         this.isResponseValid = false
-        this.showError('Nie udało się pobrać użytkowników.')
+        this.showError('Nie udało się pobrać użytkowników: ' + error.response.status)
       }
     },
     async sendEnableUserRequest(userUUID) {
@@ -72,7 +72,7 @@ export default {
         this.showSuccess('Użytkownik aktywowany.')
         this.users = this.users.filter(user => user.userUUID !== userUUID)
       } catch(error) {
-        this.showError('Nie udało się aktywować użytkownika.')
+        this.showError('Nie udało się aktywować użytkownika: ' + error.response.status)
       }
     },
     async sendDeleteUserRequest(userUUID) {

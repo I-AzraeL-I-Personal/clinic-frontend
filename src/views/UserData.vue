@@ -38,7 +38,7 @@ export default {
           register: response.data
         }
       } catch (error) {
-        this.showError('Nie udało się pobrać danych użytkownika.')
+        this.showError('Nie udało się pobrać danych użytkownika: ' + error.response.status)
       }
     }
   },

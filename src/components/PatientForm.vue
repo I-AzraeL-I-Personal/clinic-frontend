@@ -142,7 +142,7 @@ export default {
           await axios.put('/patient/' + this.$store.state.userData.userUUID, this.request.register)
         }
       } catch(error) {
-        console.log(error)
+        this.showError('Wysyłanie formularza nie powiodło się: ' + error.response.status)
       }
     },
     async fetchVoivodeships() {
@@ -150,7 +150,7 @@ export default {
         const response = await axios.get('/patient/voivodeships/')
         this.voivodeshipDto = response.data
       } catch(error) {
-        console.log(error)
+        this.showError('Błąd serwera: ' + error.response.status)
       }
     }
   },

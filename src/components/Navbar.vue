@@ -47,11 +47,12 @@ export default {
       try {
         await axios.post('/auth/logout')
         this.showSuccess('Wylogowano.')
+      } catch(error) {
+        this.showError('Błąd: ' + error.response.status)
+      } finally {
         const userData = { email: '', role: '', token: '', userUUID: '' }
         this.$store.commit('setUserData', userData)
         this.$router.push('/')
-      } catch(error) {
-        this.showError('Błąd.')
       }
     }
   }
