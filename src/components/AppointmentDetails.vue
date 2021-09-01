@@ -9,7 +9,7 @@
       <div class="mb-4">
         <label for="prescription">Recepta</label>
         <div class="span mb-2">
-          <button class="btn btn-success btn-sm" type="button" @click="downloadFile(appointmentDetails.prescription)" v-if="appointmentDetails.prescription"><i class="bi bi-file-earmark-arrow-down-fill">Pobierz</i></button>
+          <button class="btn btn-success btn-sm" type="button" @click="downloadFile('prescription')" v-if="appointmentDetails.prescription"><i class="bi bi-file-earmark-arrow-down-fill">Pobierz</i></button>
           <h6 class="text-left" v-else>-</h6>
         </div>
         <input class="form-control form-control-sm" type="file" id="prescription" ref="prescription" @change="onFileUpload('prescription')" v-if="isDoctor">
@@ -17,7 +17,7 @@
       <div class="mb-4">
         <label for="attachment">Załącznik</label>
         <div class="span mb-2">
-          <button class="btn btn-success btn-sm" type="button" @click="downloadFile(appointmentDetails.attachment)" v-if="appointmentDetails.attachment"><i class="bi bi-file-earmark-arrow-down-fill">Pobierz</i></button>
+          <button class="btn btn-success btn-sm" type="button" @click="downloadFile('attachment')" v-if="appointmentDetails.attachment"><i class="bi bi-file-earmark-arrow-down-fill">Pobierz</i></button>
           <h6 class="text-left" v-else>-</h6>
         </div>
         <input class="form-control form-control-sm" type="file" id="attachment" ref="attachment" @change="onFileUpload('attachment')" v-if="isDoctor">
@@ -45,7 +45,7 @@ export default {
       appointmentDetails: {
         description: '',
         prescription: '',
-        attachment: '',
+        attachment: ''
       },
       file: {
         attachment: null,
@@ -71,25 +71,21 @@ export default {
         const response = await axios.post(`/appointment/patient/${this.patientUUID}/${this.appointmentId}/details`, formData, {
           headers: { 'Content-Type': 'multipart/form-data'}
         })
-        this.appointmentDetails = response
+        this.appointmentDetails = response.data
       } catch(error) {
         this.showError('Nie udało się zaktualizować danych: ' + error.response.status)
       }
     },
-    onFileUpload(file) {
-      if (file === 'prescription') {
-        this.file.prescription = this.$refs.prescription.files[0];
-      } else if (file === 'attachment') {
-        this.file.attachment = this.$refs.attachment.files[0]; 
-      }
+    onFileUpload(type) {
+      this.file[type] = this.$refs[type].files[0]
     },
-    async downloadFile(filename) {
+    async downloadFile(type) {
       try {
-        const response = await axios.get(`/appointment/patient/${this.patientUUID}/${this.appointmentId}/details/${filename}`, { responseType: 'blob' })
+        const response = await axios.get(`/appointment/patient/${this.patientUUID}/${this.appointmentId}/details/${type}`, { responseType: 'blob' })
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        link.download = filename
+        link.download = this.appointmentDetails[type]
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

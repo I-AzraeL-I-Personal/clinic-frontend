@@ -135,16 +135,16 @@ export default {
     async sendRequest() {
       try {
         if (this.type === 'create') {
-        const response = await axios.post('/auth/users/', this.request.registerUser)
+        const response = await axios.post('/auth/users', this.request.registerUser)
         const responseData = response.data
 
         const config = { headers: { Authorization: responseData.token } }
         this.request.register.doctorUUID = responseData.userUUID
 
-        const response2 = await axios.post(`/doctor/`, this.request.register, config)
+        const response2 = await axios.post(`/doctor`, this.request.register, config)
         } else if (this.type === 'update') {
-          await axios.patch('/auth/users/' + this.$store.state.userData.userUUID, this.request.registerUser)
-          await axios.put('/doctor/' + this.$store.state.userData.userUUID, this.request.register)
+          await axios.patch('/auth/users' + this.$store.state.userData.userUUID, this.request.registerUser)
+          await axios.put('/doctor' + this.$store.state.userData.userUUID, this.request.register)
         }
       } catch(error) {
         this.showError('Wysyłanie formularza nie powiodło się: ' + error.response.status)
@@ -152,7 +152,7 @@ export default {
     },
     async fetchVoivodeships() {
       try {
-        const response = await axios.get('/doctor/voivodeships/')
+        const response = await axios.get('/doctor/voivodeships')
         this.voivodeshipDto = response.data
       } catch(error) {
         this.showError('Błąd serwera: ' + error.response.status)

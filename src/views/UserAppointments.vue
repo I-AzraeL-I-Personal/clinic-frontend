@@ -26,7 +26,7 @@
             <td>{{ appointment.endHour }}</td>
             <td>{{ appointment.type == 'BASIC' ? 'Zwykła' : 'Specjalistyczna' }}</td>
             <td>{{ `dr ${appointment.doctorDto.firstName} ${appointment.doctorDto.middleName} ${appointment.doctorDto.lastName}` }}</td>
-            <td><button class="btn btn-primary" @click="redirectToDetails(appointment.id)">Szczegóły</button></td>
+            <td><button class="btn btn-primary" @click="redirectToDetails(appointment.id, appointment.patientUUID)">Szczegóły</button></td>
           </tr>
         </tbody>
       </table>
@@ -71,12 +71,12 @@ export default {
         this.showError('Nie udało się pobrać danych dotyczących rezerwacji: ' + error.response.status)
       }
     },
-    redirectToDetails(appointmentId) {
+    redirectToDetails(appointmentId, patientUUID) {
       this.$router.push({ 
         name: 'AppointmentDetails', 
         query: { 
           appointmentId: appointmentId, 
-          patientUUID: this.$store.state.userData.userUUID 
+          patientUUID: patientUUID
         } 
       })
     }

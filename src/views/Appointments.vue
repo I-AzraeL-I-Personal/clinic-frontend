@@ -106,7 +106,7 @@ export default {
           patientUUID: this.$store.state.userData.userUUID,
           doctorDto: { doctorUUID: this.request.appointment.doctor }
         }
-        await axios.post('/appointment/', request)
+        await axios.post('/appointment', request)
         this.response.visible = false
         this.showSuccess('Pomyślnie dokonano rezerwacji.')
       } catch(error) {
@@ -115,7 +115,7 @@ export default {
     },
     async fetchBasicDoctorsData() {
       try {
-        const response = await axios.get('/doctor/')
+        const response = await axios.get('/doctor')
         this.doctorDto = response.data
       } catch(error) {
         this.showError('Błąd serwera: ' + error.response.status)

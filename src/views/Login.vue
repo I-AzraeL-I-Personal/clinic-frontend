@@ -42,7 +42,7 @@ export default {
   methods: {
     async sendRequest() {
       try {
-        const response = await axios.post('/auth/login/', this.request.login)
+        const response = await axios.post('/auth/login', this.request.login)
         this.$store.commit('setUserData', response.data)
         this.showSuccess('Zalogowano.')
         this.$router.push('/')
