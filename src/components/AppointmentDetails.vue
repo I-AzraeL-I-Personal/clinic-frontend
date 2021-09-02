@@ -3,11 +3,13 @@
     <form @submit.prevent="updateDetails" div class="w-50">
       <h2 class="text-left">Szczegóły wizyty</h2>
       <div class="mb-4">
-        <label for="description">Opis</label>
+        <legend class="h5">Opis</legend>
+        <hr>
         <textarea v-model="appointmentDetails.description" class="form-control" id="description" rows="3" :readonly="!isDoctor"></textarea>
       </div>
       <div class="mb-4">
-        <label for="prescription">Recepta</label>
+        <legend class="h5">Recepta</legend>
+        <hr>
         <div class="span mb-2">
           <button class="btn btn-success btn-sm" type="button" @click="downloadFile('prescription')" v-if="appointmentDetails.prescription"><i class="bi bi-file-earmark-arrow-down-fill">Pobierz</i></button>
           <h6 class="text-left" v-else>-</h6>
@@ -15,7 +17,8 @@
         <input class="form-control form-control-sm" type="file" id="prescription" ref="prescription" @change="onFileUpload('prescription')" v-if="isDoctor">
       </div>
       <div class="mb-4">
-        <label for="attachment">Załącznik</label>
+        <legend class="h5">Załącznik</legend>
+        <hr>
         <div class="span mb-2">
           <button class="btn btn-success btn-sm" type="button" @click="downloadFile('attachment')" v-if="appointmentDetails.attachment"><i class="bi bi-file-earmark-arrow-down-fill">Pobierz</i></button>
           <h6 class="text-left" v-else>-</h6>
