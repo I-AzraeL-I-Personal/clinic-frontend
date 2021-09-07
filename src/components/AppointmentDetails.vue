@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     isDoctor: function() {
-      return this.$store.state.userData.role === 'doctor'
+      return this.$store.getters.role === 'doctor'
     }
   }
 }

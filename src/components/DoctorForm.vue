@@ -181,8 +181,8 @@ export default {
 
           await axios.post(`/doctor`, this.request.register, config)
         } else if (this.type === 'update') {
-          await axios.patch('/auth/users' + this.$store.state.userData.userUUID, this.request.registerUser)
-          await axios.put('/doctor' + this.$store.state.userData.userUUID, this.request.register)
+          await axios.patch('/auth/users' + this.$store.getters.uuid, this.request.registerUser)
+          await axios.put('/doctor' + this.$store.getters.uuid, this.request.register)
         }
       } catch(error) {
         this.showError('Wysyłanie formularza nie powiodło się: ' + error.response.status)
@@ -198,12 +198,12 @@ export default {
     },
     async fetchUserData() {
       try {
-        const response = await axios.get(`/${this.$store.state.userData.role}/${this.$store.state.userData.userUUID}`)
+        const response = await axios.get(`/${this.$store.getters.role}/${this.$store.getters.uuid}`)
         this.request = {
           registerUser: { 
-            email: this.$store.state.userData.email, 
+            email: this.$store.getters.email, 
             password: '', 
-            role: this.$store.state.userData.role 
+            role: this.$store.getters.role 
           },
           register: response.data
         }

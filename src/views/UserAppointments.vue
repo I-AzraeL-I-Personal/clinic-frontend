@@ -63,7 +63,7 @@ export default {
   methods: {
     async fetchUserAppointments() {
       try {
-        const response = await axios.get(`/appointment/${this.$store.state.userData.role}/${this.$store.state.userData.userUUID}`)
+        const response = await axios.get(`/appointment/${this.$store.getters.role}/${this.$store.getters.uuid}`)
         this.appointments = response.data
         this.isResponseValid = true
       } catch(error) {

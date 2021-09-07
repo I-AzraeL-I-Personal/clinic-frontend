@@ -17,7 +17,16 @@ const store = createStore({
   mutations: {
     setUserData(state, data) {
       state.userData = data
+    },
+    clearUserData(state) {
+      state.userData = { email: '', role: '', token: '', userUUID: '' }
     }
+  },
+  getters: {
+    role: state => state.userData.role,
+    uuid: state => state.userData.userUUID,
+    token: state => state.userData.token,
+    email: state => state.userData.email
   },
   plugins: [createPersistedState()]
 })
@@ -44,18 +53,29 @@ const notificationMixin = {
 axios.defaults.baseURL = process.env.VUE_APP_APIURL
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.interceptors.request.use(
-  function(config) {
+  config => {
     if (!store.state.userData) {
-      store.commit('setUserData', { email: '', role: '', token: '', userUUID: '' })
+      store.commit('clearUserData')
     }
-    const token = store.state.userData.token
+    const token = store.getters.token
     if (token) {
       config.headers["Authorization"] = token;
     }
     return config;
   },
-  function(error) {
-    return Promise.reject(error);
+  error => Promise.reject(error)
+)
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401 && error.config.url !== '/login') {
+      store.commit('clearUserData')
+      router.push('/login')
+    }
+    if (error.response.status === 404) {
+      router.go(-1)
+    }
+    return Promise.reject(error)
   }
 )
 

@@ -11,7 +11,8 @@ import AppointmentDetails from '../components/AppointmentDetails.vue'
 const routes = [
   {
     path: '/',
-    redirect: '/about'
+    name: 'Home',
+    redirect: { name: 'About' }
   },
   {
     path: '/appoint',
@@ -54,6 +55,10 @@ const routes = [
     component: AppointmentDetails,
     props: route => Object.assign({}, route.query, route.params)
   },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: { name: 'Home' }
+  }
 ]
 
 const router = createRouter({
