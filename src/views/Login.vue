@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-3">
     <h2 class="text-left">Zaloguj się</h2>
     <form @submit.prevent="sendRequest" class="row g-3 w-50">
       <div class="col-md-12 form-floating">

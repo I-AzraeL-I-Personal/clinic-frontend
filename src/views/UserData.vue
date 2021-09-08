@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-3">
     <PatientForm title="Dane użytkownika" submitText="Aktualizuj" type="update" v-if="$store.getters.role === 'patient'"/>
     <DoctorForm title="Dane użytkownika" submitText="Aktualizuj" type="update" v-if="$store.getters.role === 'doctor'"/>
   </div>

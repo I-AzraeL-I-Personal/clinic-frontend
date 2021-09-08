@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-3">
     <h2 class="text-left">Wyszukaj wizytę</h2>
     <form @submit.prevent="sendFindRequest" class="row g-3">
       <div class="col-md-6 form-floating">

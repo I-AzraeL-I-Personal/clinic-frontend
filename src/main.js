@@ -71,9 +71,12 @@ axios.interceptors.response.use(
     if (error.response.status === 401 && error.config.url !== '/login') {
       store.commit('clearUserData')
       router.push('/login')
+      return Promise.reject(error)
     }
-    if (error.response.status === 404) {
+    if (error.response.status === 404 && error.config.url !== '/appointment/find') {
+      console.log(error.config.url)
       router.go(-1)
+      return Promise.reject(error)
     }
     return Promise.reject(error)
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-3">
     <h2 class="text-left">Moje wizyty</h2>
     <div class="btn-group d-flex" role="group">
       <input type="radio" class="btn-check" id="future-appointments" autocomplete="off" v-model='selectedView' value="future" checked>

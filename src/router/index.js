@@ -5,14 +5,14 @@ import Login from '../views/Login.vue'
 import UserAppointments from '../views/UserAppointments.vue'
 import UserData from '../views/UserData.vue'
 import AdminPanel from '../views/AdminPanel.vue'
-import About from '../views/About.vue'
+import Home from '../views/Home.vue'
 import AppointmentDetails from '../components/AppointmentDetails.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    redirect: { name: 'About' }
+    component: Home
   },
   {
     path: '/appoint',
@@ -45,11 +45,6 @@ const routes = [
     component: AdminPanel
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About
-  },
-  {
     path: '/appointment-details',
     name: 'AppointmentDetails',
     component: AppointmentDetails,
@@ -62,7 +57,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 

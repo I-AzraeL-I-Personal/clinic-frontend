@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-3">
     <PatientForm title="Zarejestruj się" submitText="Zarejestruj" type="create"/>
   </div>
 </template>
