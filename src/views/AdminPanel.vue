@@ -68,7 +68,7 @@ export default {
     },
     async sendEnableUserRequest(userUUID) {
       try {
-        await axios.put('/auth/users' + userUUID)
+        await axios.put('/auth/users/' + userUUID)
         this.showSuccess('Użytkownik aktywowany.')
         this.users = this.users.filter(user => user.userUUID !== userUUID)
       } catch(error) {
@@ -77,10 +77,10 @@ export default {
     },
     async sendDeleteUserRequest(userUUID) {
       try {
-        await axios.delete('/auth/users' + userUUID)
+        await axios.delete('/auth/users/' + userUUID)
         this.showSuccess('Użytkownik usunięty z systemu autentykacji.')
         this.users = this.users.filter(user => user.userUUID !== userUUID)
-        await axios.delete('/patient' + userUUID)
+        await axios.delete('/patient/' + userUUID)
         this.showSuccess('Użytkownik usunięty z systemu głównego.')
       } catch(error) {
         this.showError('Nie udało się usunąć użytkownika z systemu: ' + error.response.status)

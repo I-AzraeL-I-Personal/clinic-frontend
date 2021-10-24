@@ -180,9 +180,12 @@ export default {
           this.request.register.doctorUUID = responseData.userUUID
 
           await axios.post(`/doctor`, this.request.register, config)
+          this.$forceUpdate()
         } else if (this.type === 'update') {
-          await axios.patch('/auth/users' + this.$store.getters.uuid, this.request.registerUser)
-          await axios.put('/doctor' + this.$store.getters.uuid, this.request.register)
+          const userResponse = await axios.patch('/auth/users/' + this.$store.getters.uuid, this.request.registerUser)
+          const doctorResponse = await axios.put('/doctor/' + this.$store.getters.uuid, this.request.register)
+          this.request.registerUser = userResponse.data
+          this.request.register = doctorResponse.data
         }
       } catch(error) {
         this.showError('Wysyłanie formularza nie powiodło się: ' + error.response.status)

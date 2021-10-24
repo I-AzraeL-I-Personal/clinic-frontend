@@ -173,9 +173,12 @@ export default {
           this.request.register.patientUUID = responseData.userUUID
 
           await axios.post('/patient', this.request.register, config)
+          this.$router.push({ name: 'Home' })
         } else if (this.type === 'update') {
-          await axios.patch('/auth/users' + this.$store.getters.uuid, this.request.registerUser)
-          await axios.put('/patient' + this.$store.getters.uuid, this.request.register)
+          const userResponse = await axios.patch('/auth/users/' + this.$store.getters.uuid, this.request.registerUser)
+          const patientResponse = await axios.put('/patient/' + this.$store.getters.uuid, this.request.register)
+          this.request.registerUser = userResponse.data
+          this.request.register = patientResponse.data
         }
       } catch(error) {
         this.showError('Wysyłanie formularza nie powiodło się: ' + error.response.status)
