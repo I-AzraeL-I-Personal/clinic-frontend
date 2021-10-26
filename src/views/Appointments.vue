@@ -3,10 +3,6 @@
     <h2 class="text-left">Wyszukaj wizytę</h2>
     <form @submit.prevent="sendFindRequest" class="row g-3">
       <div class="col-md-6 form-floating">
-        <input class="form-control" type="date" id="appointmentDate" v-model="request.appointment.date">
-        <label for="appointmentDate">Data</label>
-      </div>
-      <div class="col-md-6 form-floating">
         <select class="form-select" id="doctorName" v-model='request.appointment.doctor'>
           <option v-for="doctor in doctorDto" :key="doctor.doctorUUID" :value="doctor.doctorUUID">{{ `dr ${doctor.firstName} ${doctor.middleName} ${doctor.lastName}` }}</option>
         </select>
@@ -23,27 +19,21 @@
       </div>
     </form>
     <div class="mt-5" v-if="response.visible">
-      <h3 class="text-left" v-if="response.valid">Wizyty na dzień {{ response.data.date }}</h3>
-      <h3 class="text-left" v-else>Nie znaleziono wolnych terminów</h3>
       <transition name="fade" mode="out-in" appear>
-        <table class="table table-hover" v-if="response.valid">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Początek</th>
-              <th scope="col">Koniec</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(appointment, index) in response.data.appointments" v-bind:key="appointment">
-              <th scope="row">{{ index }}</th>
-              <td>{{ appointment.start }}</td>
-              <td>{{ appointment.end }}</td>
-              <td><button class="btn btn-primary" @click="sendMakeAppointmentRequest(appointment.start)">Zapisz się</button></td>
-            </tr>
-          </tbody>
-        </table>
+        <vue-cal v-if="response.valid"
+          active-view="week" 
+          :disable-views="['years', 'year', 'month', 'day']"
+          hide-weekends
+          :time-from="8 * 60" 
+          :time-to="16.25 * 60" 
+          :time-step="15"
+          :min-date="minDate"
+          :events="appointmentsAsEvents"
+          :on-event-click="sendMakeAppointmentRequest"
+          @view-change="handleWeekChanged($event)"
+          locale="pl"
+          style="height: 100%">
+        </vue-cal>
       </transition>
     </div>
   </div>
@@ -51,8 +41,15 @@
 
 <script>
 import axios from 'axios'
+import VueCal from 'vue-cal'
+import 'vue-cal/dist/i18n/pl.js'
+import 'vue-cal/dist/vuecal.css'
+import { startOfISOWeek, formatISO, addDays } from 'date-fns'
 export default {
   name: 'Appointments',
+  components: {
+    VueCal
+  },
   created() {
     this.fetchBasicDoctorsData()
   },
@@ -63,18 +60,15 @@ export default {
       ],
       request: {
         appointment: {
-          date: new Date().toISOString().split('T')[0],
+          date: formatISO(startOfISOWeek(new Date()), { representation: 'date' }),
           doctor: '',
           type: 'BASIC'
         }
       },
       response: {
-        data: {
-          date: Date,
-          appointments: [
-            { start: Date, end: Date }
-          ]
-        },
+        appointments: [
+          { start: Date, end: Date }
+        ],
         valid: false,
         visible: false
       },
@@ -83,25 +77,28 @@ export default {
   methods: {
     async sendFindRequest() {
       try {
+        let endDate = formatISO(addDays(new Date(this.request.appointment.date), 4), { representation: 'date' })
+
         const response = await axios.get('/appointment/find', { 
           params: { 
             doctorUUID: this.request.appointment.doctor, 
-            date: this.request.appointment.date, 
+            startDate: this.request.appointment.date,
+            endDate: endDate,
             type: this.request.appointment.type 
           } 
         })
-        this.response.data = response.data
-        this.response.valid = this.response.data.appointments.length > 0
+        this.response.appointments = response.data
+        this.response.valid = this.response.appointments.length > 0
       } catch(error) {
         this.response.valid = false
       }
       this.response.visible = true
     },
-    async sendMakeAppointmentRequest(appointmentStartHour) {
+    async sendMakeAppointmentRequest(event) {
       try {
         const request = {
-          date: this.request.appointment.date,
-          startHour: appointmentStartHour,
+          date: formatISO(event.start, { representation: 'date' }),
+          startHour: event.start.toLocaleTimeString(),
           type: this.request.appointment.type,
           patientUUID: this.$store.getters.uuid,
           doctorDto: { doctorUUID: this.request.appointment.doctor }
@@ -120,13 +117,43 @@ export default {
       } catch(error) {
         this.showError('Błąd serwera: ' + error.response.status)
       }
+    },
+    handleWeekChanged($event) {
+      this.request.appointment.date = formatISO(new Date($event.startDate), { representation: 'date' })
+      this.sendFindRequest()
+    }
+  },
+  computed: {
+    minDate: function() {
+      return new Date()
+    },
+    appointmentsAsEvents() {
+      const events = []
+      this.response.appointments.forEach(appointment => {
+        events.push({
+          start: appointment.start.replace('T', ' ').replace('Z', ' '),
+          end: appointment.end.replace('T', ' ').replace('Z', ' '),
+        })
+      });
+      return events
     }
   }
 }
 </script>
 
+<style>
+  .vuecal__event {
+    border: 1px solid gray;
+    padding: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
 <style scoped>
   .container {
     padding-bottom: 60px;
+    align-items: center;
   }
 </style>

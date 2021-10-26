@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-3">
     <form @submit.prevent="updateDetails" div class="w-50">
       <h2 class="text-left">Szczegóły wizyty</h2>
       <div class="mb-4">

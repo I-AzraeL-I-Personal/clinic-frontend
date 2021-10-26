@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="@/assets/home.jpg" class="img-fluid" alt="">
+    <img src="@/assets/home.jpg" class="img-fluid w-100" alt="">
     <div class="container mt-5">
       <div class="row row-cols-2 row-cols-md-2 g-4">
         <div class="col" v-if="!$store.getters.token">
@@ -81,5 +81,8 @@ export default {
 <style scoped>
   .container {
     padding-bottom: 60px;
+  }
+  .img-fluid {
+    width: 100%;
   }
 </style>

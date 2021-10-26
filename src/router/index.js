@@ -6,7 +6,7 @@ import UserAppointments from '../views/UserAppointments.vue'
 import UserData from '../views/UserData.vue'
 import AdminPanel from '../views/AdminPanel.vue'
 import Home from '../views/Home.vue'
-import AppointmentDetails from '../components/AppointmentDetails.vue'
+import AppointmentDetails from '../views/AppointmentDetails.vue'
 
 const routes = [
   {
