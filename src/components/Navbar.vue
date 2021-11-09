@@ -21,9 +21,9 @@
               Konto
             </a>
             <ul class="dropdown-menu" labelledby="navbarDropdownMenuLink">
-              <li><router-link class="dropdown-item" :to="{ name: 'UserAppointments' }">Moje wizyty</router-link></li>
-              <li><router-link class="dropdown-item" :to="{ name: 'UserData' }">Moje konto</router-link></li>
-              <li v-if="$store.getters.role === 'system_admin'"><router-link class="dropdown-item" :to="{ name: 'AdminPanel' }">Panel admina</router-link></li>
+              <li v-if="$store.getters.role !== 'admin'" ><router-link class="dropdown-item" :to="{ name: 'UserAppointments' }">Moje wizyty</router-link></li>
+              <li v-if="$store.getters.role !== 'admin'"><router-link class="dropdown-item" :to="{ name: 'UserData' }">Moje konto</router-link></li>
+              <li v-if="$store.getters.role === 'admin'"><router-link class="dropdown-item" :to="{ name: 'AdminPanel' }">Panel admina</router-link></li>
             </ul>
           </li>
         </ul>
@@ -44,20 +44,13 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'Header',
   methods: {
-    async logout() {
-      try {
-        await axios.post('/auth/logout')
-        this.showSuccess('Wylogowano.')
-      } catch(error) {
-        this.showError('Błąd: ' + error.response.status)
-      } finally {
-        this.$store.commit('clearUserData')
-        this.$router.push('/')
-      }
+    logout() {
+      this.$store.commit('clearUserData')
+      this.$router.push('/')
+      this.showSuccess('Wylogowano.')
     }
   }
 }
