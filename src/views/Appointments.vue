@@ -106,6 +106,7 @@ export default {
         await axios.post('/appointment', request)
         this.response.visible = false
         this.showSuccess('Pomyślnie dokonano rezerwacji.')
+        this.$router.push('/')
       } catch(error) {
         this.showError('Nie udało się wykonać rezerwacji: ' + error.response.status)
       }

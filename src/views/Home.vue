@@ -3,41 +3,17 @@
     <img src="@/assets/home.jpg" class="img-fluid w-100" alt="">
     <div class="container mt-5">
       <div class="row row-cols-2 row-cols-md-2 g-4">
-        <div class="col" v-if="!$store.getters.token">
-          <div class="card text-center">
-            <img src="@/assets/register.svg" class="card-img-top" alt="" width="200" height="200">
-            <div class="card-body">
-              <h5 class="card-title">Nie masz konta?</h5>
-              <router-link class="btn btn-primary" :to="{ name: 'Register' }">Zarejestruj się</router-link>
-            </div>
-          </div>
+        <div class="col" v-if="!isToken">
+          <HomeCard :cardTitle="'Nie masz konta?'" :linkToComponent="'Register'" :linkName="'Zarejestruj się'" :image="'register.svg'"/>
         </div>
-        <div class="col" v-if="!$store.getters.token">
-          <div class="card text-center">
-            <img src="@/assets/login.svg" class="card-img-top" alt="" width="200" height="200">
-            <div class="card-body">
-              <h5 class="card-title">Masz już konto?</h5>
-              <router-link class="btn btn-primary" :to="{ name: 'Login' }">Zaloguj się</router-link>
-            </div>
-          </div>
+        <div class="col" v-if="!isToken">
+          <HomeCard :cardTitle="'Masz już konto?'" :linkToComponent="'Login'" :linkName="'Zaloguj się'" :image="'login.svg'"/>
         </div>
-        <div class="col" v-if="$store.getters.token">
-          <div class="card text-center">
-            <img src="@/assets/calendar-check.svg" class="card-img-top" alt="" width="200" height="200">
-            <div class="card-body">
-              <h5 class="card-title">Potrzebujesz porady lekarskiej?</h5>
-              <router-link class="btn btn-primary" :to="{ name: 'Appoint' }">Wyszukaj wizytę</router-link>
-            </div>
-          </div>
+        <div class="col" v-if="isToken">
+          <HomeCard :cardTitle="'Potrzebujesz porady lekarskiej?'" :linkToComponent="'Appoint'" :linkName="'Wyszukaj wizytę'" :image="'calendar-check.svg'"/>
         </div>
-        <div class="col" v-if="$store.getters.token">
-          <div class="card text-center">
-            <img src="@/assets/calendar4-week.svg" class="card-img-top" alt="" width="200" height="200">
-            <div class="card-body">
-              <h5 class="card-title">Chcesz zobaczyć szczegóły ostatniej wizyty?</h5>
-              <router-link class="btn btn-primary" :to="{ name: 'UserAppointments' }">Przejdź do listy</router-link>
-            </div>
-          </div>
+        <div class="col" v-if="isToken">
+          <HomeCard :cardTitle="'Chcesz zobaczyć szczegóły ostatniej wizyty?'" :linkToComponent="'UserAppointments'" :linkName="'Przejdź do listy'" :image="'calendar4-week.svg'"/>
         </div>
       </div>
       <div class="mt-5">
@@ -73,8 +49,15 @@
 </template>
 
 <script>
+import HomeCard from '../components/HomeCard.vue'
 export default {
+  components: { HomeCard },
   name: 'Home',
+  computed: {
+    isToken: function() {
+      return this.$store.getters.token
+    },
+  }
 }
 </script>
 

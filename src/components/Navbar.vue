@@ -13,29 +13,29 @@
           <li class="nav-item">
             <router-link class="nav-link active" :to="{ name: 'Home' }">Strona główna</router-link>
           </li>
-          <li class="nav-item" v-if="$store.getters.token">
+          <li class="nav-item" v-if="isToken">
             <router-link class="nav-link" :to="{ name: 'Appoint' }">Wizyty</router-link>
           </li>
-          <li class="nav-item dropdown" v-if="$store.getters.token">
+          <li class="nav-item dropdown" v-if="isToken">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" expanded="false">
               Konto
             </a>
             <ul class="dropdown-menu" labelledby="navbarDropdownMenuLink">
-              <li v-if="$store.getters.role !== 'admin'" ><router-link class="dropdown-item" :to="{ name: 'UserAppointments' }">Moje wizyty</router-link></li>
-              <li v-if="$store.getters.role !== 'admin'"><router-link class="dropdown-item" :to="{ name: 'UserData' }">Moje konto</router-link></li>
-              <li v-if="$store.getters.role === 'admin'"><router-link class="dropdown-item" :to="{ name: 'AdminPanel' }">Panel admina</router-link></li>
+              <li v-if="!isAdmin"><router-link class="dropdown-item" :to="{ name: 'UserAppointments' }">Moje wizyty</router-link></li>
+              <li v-if="!isAdmin"><router-link class="dropdown-item" :to="{ name: 'UserData' }">Moje konto</router-link></li>
+              <li v-if="isAdmin"><router-link class="dropdown-item" :to="{ name: 'AdminPanel' }">Panel admina</router-link></li>
             </ul>
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item" v-if="!$store.getters.token">
+          <li class="nav-item" v-if="!isToken">
             <router-link class="nav-link" :to="{ name: 'Register' }">Rejestracja</router-link>
           </li>
-          <li class="nav-item" v-if="!$store.getters.token">
+          <li class="nav-item" v-if="!isToken">
             <router-link class="nav-link" :to="{ name: 'Login' }">Logowanie</router-link>
           </li>
-          <li class="nav-item" v-if="$store.getters.token">
-            <a class="nav-link" href="#" @click="logout()">Wyloguj</a>
+          <li class="nav-item" v-if="isToken">
+            <a class="nav-link" href="#" @click="logout">Wyloguj</a>
           </li>
         </ul>
       </div>
@@ -51,6 +51,14 @@ export default {
       this.$store.commit('clearUserData')
       this.$router.push('/')
       this.showSuccess('Wylogowano.')
+    }
+  },
+  computed: {
+    isToken: function() {
+      return this.$store.getters.token
+    },
+    isAdmin: function() {
+      return this.$store.getters.role === 'admin'
     }
   }
 }

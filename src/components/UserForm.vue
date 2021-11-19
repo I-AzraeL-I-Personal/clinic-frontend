@@ -45,6 +45,11 @@
         <label for="gender">Płeć</label>
         <div class="invalid-feedback" v-if="v$.register.gender.$error">Nie wybrano płci</div>
       </div>
+      <div class="mb-3 form-floating" v-if="role === 'doctor'">
+        <input class="form-control" :class="getClass('employmentDate')" type="date" id="employmentDate" v-model="register.employmentDate" @blur="v$.register.employmentDate.$touch" required>
+        <label for="employmentDate">Data zatrudnienia</label>
+        <div class="invalid-feedback" v-if="v$.register.employmentDate.$error">Nieprawidłowa data zatrudnienia</div>
+      </div>
     </fieldset>
     <fieldset>
       <legend class="h5">Dane kontaktowe</legend>
@@ -65,8 +70,13 @@
         <div class="invalid-feedback" v-if="v$.register.contact.street.$error">Pole ulica nie może być puste</div>
       </div>
       <div class="mb-3 form-floating">
-        <input class="form-control" type="text" id="houseNum" v-model="register.contact.houseNum">
-        <label for="houseNum">Numer mieszkania</label>
+        <input class="form-control" :class="getClass('houseNum', 'register', 'contact')" type="text" id="houseNum" v-model="register.contact.houseNum" @blur="v$.register.contact.houseNum.$touch" required>
+        <label for="houseNum">Numer domu</label>
+        <div class="invalid-feedback" v-if="v$.register.contact.houseNum.$error">Pole numer domu nie może być puste</div>
+      </div>
+      <div class="mb-3 form-floating">
+        <input class="form-control" type="text" id="flatNum" v-model="register.contact.flatNum">
+        <label for="flatNum">Numer mieszkania</label>
       </div>
       <div class="mb-3 form-floating">
         <select class="form-select" :class="v$.register.contact.voivodeship.id.$error ? 'is-invalid' : (v$.register.contact.voivodeship.id.$dirty ? 'is-valid' : '')" @blur="v$.register.contact.voivodeship.id.$touch" id="voivodeship" v-model="register.contact.voivodeship.id" required>
@@ -85,13 +95,14 @@
 <script>
 import axios from 'axios'
 import useVuelidate from '@vuelidate/core'
-import { required, email, minLength, maxLength, numeric } from '@vuelidate/validators'
+import { required, requiredIf, email, minLength, maxLength, numeric } from '@vuelidate/validators'
 export default {
-  name: 'PatientForm',
+  name: 'UserForm',
   props: {
     title: String,
     submitText: String,
     type: String,
+    role: String
   },
   setup() {
     return { v$: useVuelidate() }
@@ -110,23 +121,24 @@ export default {
       registerUser: {
         email: '',
         password: '',
-        role: 'patient'
+        role: this.role
       },
       register: {
+        doctorUUID: '',
         patientUUID: '',
         firstName: '',
         middleName: '',
         lastName: '',
+        employmentDate: new Date().toISOString().split('T')[0],
         pesel: '',
         gender: '',
         contact: {
           phoneNumber: '',
-          voivodeship: {
-            id: ''
-          },
+          voivodeship: { id: '' },
           city: '',
           street: '',
-          houseNum: ''
+          houseNum: '',
+          flatNum: ''
         }
       }
     }
@@ -140,13 +152,15 @@ export default {
       register: {
         firstName: { required },
         lastName: { required },
+        employmentDate: { required: requiredIf(() => this.role === 'doctor') },
         pesel: { required, numeric, min: minLength(11), max: maxLength(11) },
         gender: { required },
         contact: {
           phoneNumber: { required, numeric },
           voivodeship: { id: { required } },
           city: { required },
-          street: { required }
+          street: { required },
+          houseNum: { required }
         },
       }
     }
@@ -159,23 +173,25 @@ export default {
           const responseData = response.data
 
           const config = { headers: { Authorization: responseData.token } }
+          this.register.doctorUUID = responseData.userUUID
           this.register.patientUUID = responseData.userUUID
 
-          await axios.post('/patient', this.register, config)
-          this.$router.push({ name: 'Home' })
+          await axios.post(`/${this.role}`, this.register, config)
+          this.$router.push('/')
         } else if (this.type === 'update') {
-          const userResponse = await axios.patch('/auth/users/' + this.$store.getters.uuid, this.registerUser)
-          const patientResponse = await axios.put('/patient/' + this.$store.getters.uuid, this.register)
+          const userResponse = await axios.put(`/auth/users/${this.$store.getters.uuid}`, this.registerUser)
+          const response = await axios.put(`/${this.role}/${this.$store.getters.uuid}`, this.register)
           this.registerUser = userResponse.data
-          this.register = patientResponse.data
+          this.register = response.data
         }
+        this.showSuccess('Sukces')
       } catch(error) {
         this.showError('Wysyłanie formularza nie powiodło się: ' + error.response.status)
       }
     },
     async fetchVoivodeships() {
       try {
-        const response = await axios.get('/patient/voivodeships')
+        const response = await axios.get(`/${this.role}/voivodeships`)
         this.voivodeship = response.data
       } catch(error) {
         this.showError('Błąd serwera: ' + error.response.status)
@@ -183,11 +199,11 @@ export default {
     },
     async fetchUserData() {
       try {
-        const response = await axios.get(`/${this.$store.getters.role}/${this.$store.getters.uuid}`)
+        const response = await axios.get(`/${this.role}/${this.$store.getters.uuid}/with-contact`)
         this.registerUser = { 
           email: this.$store.getters.email, 
           password: '', 
-          role: this.$store.getters.role 
+          role: this.role
         },
         this.register = response.data
       } catch (error) {

@@ -1,18 +1,15 @@
 <template>
   <div class="container mt-3">
-    <PatientForm title="Dane użytkownika" submitText="Aktualizuj" type="update" v-if="$store.getters.role === 'patient'"/>
-    <DoctorForm title="Dane użytkownika" submitText="Aktualizuj" type="update" v-if="$store.getters.role === 'doctor'"/>
+    <UserForm title="Dane użytkownika" submitText="Aktualizuj" type="update" :role="$store.getters.role"/>
   </div>
 </template>
 
 <script>
-import PatientForm from '../components/PatientForm.vue'
-import DoctorForm from '../components/DoctorForm.vue'
+import UserForm from '../components/UserForm.vue'
 export default {
   name: 'UserData',
   components: {
-    PatientForm,
-    DoctorForm
+    UserForm
   }
 }
 </script>

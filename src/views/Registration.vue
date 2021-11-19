@@ -1,15 +1,15 @@
 <template>
   <div class="container mt-3">
-    <PatientForm title="Zarejestruj się" submitText="Zarejestruj" type="create"/>
+    <UserForm title="Zarejestruj się" submitText="Zarejestruj" type="create" role="patient"/>
   </div>
 </template>
 
 <script>
-import PatientForm from '../components/PatientForm.vue'
+import UserForm from '../components/UserForm.vue'
 export default {
   name: 'Registration',
   components: {
-    PatientForm,
+    UserForm
   },
 }
 </script>
