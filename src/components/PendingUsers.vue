@@ -52,7 +52,7 @@ export default {
     },
     async sendEnableUserRequest(userUUID) {
       try {
-        await axios.put('/auth/users/' + userUUID)
+        await axios.patch('/auth/users/' + userUUID)
         this.showSuccess('Użytkownik aktywowany.')
         this.users = this.users.filter(user => user.userUUID !== userUUID)
       } catch(error) {

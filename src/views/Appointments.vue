@@ -1,26 +1,31 @@
 <template>
   <div class="container mt-3">
     <h2 class="text-left">Wyszukaj wizytę</h2>
-    <form @submit.prevent="sendFindRequest" class="row g-3">
-      <div class="col-md-6 form-floating">
-        <select class="form-select" id="doctorName" v-model='request.appointment.doctor'>
-          <option v-for="doctor in doctorDto" :key="doctor.doctorUUID" :value="doctor.doctorUUID">{{ `dr ${doctor.firstName} ${doctor.middleName} ${doctor.lastName}` }}</option>
-        </select>
-        <label for="doctorName">Lekarz</label>
-      </div>
-      <div class="col-12">
-        <div class="btn-group" role="group">
-          <input type="radio" class="btn-check" name="visit-type" id="visit-default" autocomplete="off" v-model='request.appointment.type' value="BASIC" checked>
-          <label class="btn btn-outline-primary" for="visit-default">Zwykła</label>
-          <input type="radio" class="btn-check" name="visit-type" id="visit-specialist" autocomplete="off" v-model='request.appointment.type' value="SPECIALIST">
-          <label class="btn btn-outline-primary" for="visit-specialist">Specjalistyczna</label>
+    <form @submit.prevent="sendFindRequest" class="w-50">
+      <fieldset>
+        <div class="mb-3 form-floating">
+          <select class="form-select" id="doctorName" v-model='request.appointment.doctor' :class="v$.request.appointment.doctor.$error ? 'is-invalid' : (v$.request.appointment.doctor.$dirty ? 'is-valid' : '')" @blur="v$.request.appointment.doctor.$touch" required>
+            <option v-for="doctor in doctorDto" :key="doctor.doctorUUID" :value="doctor.doctorUUID">{{ `dr ${doctor.firstName} ${doctor.lastName}` }}</option>
+          </select>
+          <label for="doctorName">Lekarz</label>
+          <div class="invalid-feedback" v-if="v$.request.appointment.doctor.$error">Nie wybrano lekarza</div>
         </div>
+        <div class="mb-3 form-floating">
+          <div class="btn-group" role="group">
+            <input type="radio" class="btn-check" name="visit-type" id="visit-default" autocomplete="off" v-model='request.appointment.type' value="BASIC" checked>
+            <label class="btn btn-outline-primary" for="visit-default">Zwykła</label>
+            <input type="radio" class="btn-check" name="visit-type" id="visit-specialist" autocomplete="off" v-model='request.appointment.type' value="SPECIALIST">
+            <label class="btn btn-outline-primary" for="visit-specialist">Specjalistyczna</label>
+          </div>
+        </div>
+      </fieldset>
+      <div class="mb-3">
         <button class="btn btn-secondary" type="submit">Szukaj</button>
       </div>
     </form>
     <div class="mt-5" v-if="response.visible">
       <transition name="fade" mode="out-in" appear>
-        <vue-cal v-if="response.valid"
+        <vue-cal
           active-view="week" 
           :disable-views="['years', 'year', 'month', 'day']"
           hide-weekends
@@ -45,10 +50,15 @@ import VueCal from 'vue-cal'
 import 'vue-cal/dist/i18n/pl.js'
 import 'vue-cal/dist/vuecal.css'
 import { startOfISOWeek, formatISO, addDays } from 'date-fns'
+import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 export default {
   name: 'Appointments',
   components: {
     VueCal
+  },
+  setup() {
+    return { v$: useVuelidate() }
   },
   created() {
     this.fetchBasicDoctorsData()
@@ -74,6 +84,15 @@ export default {
       },
     }
   },
+  validations() {
+    return {
+      request: {
+        appointment: {
+          doctor: { required }
+        }
+      },
+    }
+  },
   methods: {
     async sendFindRequest() {
       try {
@@ -88,11 +107,11 @@ export default {
           } 
         })
         this.response.appointments = response.data
-        this.response.valid = this.response.appointments.length > 0
+        this.response.visible = true
       } catch(error) {
-        this.response.valid = false
+        this.showError('Nie udało się wyszukać wolnych rezerwacji: ' + error.response.status)
+        this.response.visible = false
       }
-      this.response.visible = true
     },
     async sendMakeAppointmentRequest(event) {
       try {
@@ -101,12 +120,12 @@ export default {
           startHour: event.start.toLocaleTimeString(),
           type: this.request.appointment.type,
           patientUUID: this.$store.getters.uuid,
-          doctorDto: { doctorUUID: this.request.appointment.doctor }
+          doctorUUID: this.request.appointment.doctor
         }
         await axios.post('/appointment', request)
         this.response.visible = false
         this.showSuccess('Pomyślnie dokonano rezerwacji.')
-        this.$router.push('/')
+        this.$router.push('/user-appointments')
       } catch(error) {
         this.showError('Nie udało się wykonać rezerwacji: ' + error.response.status)
       }
@@ -149,6 +168,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .vuecal__menu {
+    visibility: hidden;
   }
 </style>
 

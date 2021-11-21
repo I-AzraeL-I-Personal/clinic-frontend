@@ -37,8 +37,7 @@ import axios from 'axios'
 export default {
   name: 'AppointmentDetails',
   props: {
-    appointmentId: String,
-    patientUUID: String
+    appointmentId: String
   },
   created() {
     this.fetchDetails()
@@ -59,7 +58,7 @@ export default {
   methods: {
     async fetchDetails() {
       try {
-        const response = await axios.get(`/appointment/patient/${this.patientUUID}/${this.appointmentId}/details`)
+        const response = await axios.get(`/appointment/${this.appointmentId}/details`)
         this.appointmentDetails = response.data
       } catch(error) {
         this.showError("Nie udało się pobrać szczegółowych danych: " + error.response.status)
@@ -71,7 +70,7 @@ export default {
         formData.append('details', new Blob([JSON.stringify(this.appointmentDetails)], { type: 'application/json' }))
         formData.append('prescription', this.file.prescription)
         formData.append('attachment', this.file.attachment)
-        const response = await axios.post(`/appointment/patient/${this.patientUUID}/${this.appointmentId}/details`, formData, {
+        const response = await axios.post(`/appointment/${this.appointmentId}/details`, formData, {
           headers: { 'Content-Type': 'multipart/form-data'}
         })
         this.appointmentDetails = response.data
@@ -84,7 +83,7 @@ export default {
     },
     async downloadFile(type) {
       try {
-        const response = await axios.get(`/appointment/patient/${this.patientUUID}/${this.appointmentId}/details/${type}`, { responseType: 'blob' })
+        const response = await axios.get(`/appointment/${this.appointmentId}/details/${type}`, { responseType: 'blob' })
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url

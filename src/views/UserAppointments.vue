@@ -22,11 +22,11 @@
         <tbody>
           <tr v-for="appointment in filterAppointments" v-bind:key="appointment">
             <td>{{ appointment.date }}</td>
-            <td>{{ appointment.startHour }}</td>
-            <td>{{ appointment.endHour }}</td>
+            <td>{{ appointment.startHour.slice(0, -3) }}</td>
+            <td>{{ appointment.endHour.slice(0, -3) }}</td>
             <td>{{ appointment.type == 'BASIC' ? 'Zwykła' : 'Specjalistyczna' }}</td>
-            <td>{{ `dr ${appointment.doctorDto.firstName} ${appointment.doctorDto.middleName} ${appointment.doctorDto.lastName}` }}</td>
-            <td><button class="btn btn-primary" @click="redirectToDetails(appointment.id, appointment.patientUUID)">Szczegóły</button></td>
+            <td>{{ `dr ${appointment.doctor.firstName} ${appointment.doctor.lastName}` }}</td>
+            <td><button class="btn btn-primary" @click="redirectToDetails(appointment.id)">Szczegóły</button></td>
           </tr>
         </tbody>
       </table>
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       appointments: [
-        { date: '', startHour: '', endHour: '', type: '', doctorDto: { doctorUUID: '', firstName: '', middleName: '', lastName: '' } }
+        { date: '', startHour: '', endHour: '', type: '', doctor: { doctorUUID: '', firstName: '', middleName: '', lastName: '' } }
       ],
       isResponseValid: false,
       selectedView: 'future'
@@ -71,13 +71,10 @@ export default {
         this.showError('Nie udało się pobrać danych dotyczących rezerwacji: ' + error.response.status)
       }
     },
-    redirectToDetails(appointmentId, patientUUID) {
+    redirectToDetails(appointmentId) {
       this.$router.push({ 
         name: 'AppointmentDetails', 
-        query: { 
-          appointmentId: appointmentId, 
-          patientUUID: patientUUID
-        } 
+        query: { appointmentId: appointmentId } 
       })
     }
   }
