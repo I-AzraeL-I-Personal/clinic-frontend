@@ -17,11 +17,13 @@
     "core-js": "^3.6.5",
     "date-fns": "^2.25.0",
     "dns-packet": "^5.2.4",
+    "source-map-js": "^1.0.1",
     "vue": "^3.0.0",
     "vue-axios": "^3.2.4",
     "vue-cal": "^4.2.0",
     "vue-final-modal": "^3.4.0",
     "vue-router": "^4.0.0-0",
+    "vue3-timepicker": "^1.0.0-beta.2",
     "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.0.0",
     "ws": "^7.4.6"

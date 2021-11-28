@@ -86,6 +86,28 @@
         <div class="invalid-feedback" v-if="v$.register.contact.voivodeship.id.$error">Nie wybrano województwa</div>
       </div>
     </fieldset>
+    <fieldset v-if="role === 'doctor' && register.workDays">
+      <legend class="h5">Dni pracy</legend>
+      <hr>
+      <div class="mb-3">
+        <WorkDay ref="monday" dayName="Poniedziałek" dayValue="MONDAY" :hours="getWorkDay('MONDAY')"/>
+      </div>
+      <div class="mb-3">
+        <WorkDay ref="tuesday" dayName="Wtorek" dayValue="TUESDAY" :hours="getWorkDay('TUESDAY')"/>
+      </div>
+      <div class="mb-3">
+        <WorkDay ref="wednesday" dayName="Środa" dayValue="WEDNESDAY" :hours="getWorkDay('WEDNESDAY')"/>
+      </div>
+      <div class="mb-3">
+        <WorkDay ref="thursday" dayName="Czwartek" dayValue="THURSDAY" :hours="getWorkDay('THURSDAY')"/>
+      </div>
+      <div class="mb-3">
+        <WorkDay ref="friday" dayName="Piątek" dayValue="FRIDAY" :hours="getWorkDay('FRIDAY')"/>
+      </div>
+      <div class="mb-3">
+        <WorkDay ref="saturday" dayName="Sobota" dayValue="SATURDAY" :hours="getWorkDay('SATURDAY')"/>
+      </div>
+    </fieldset>
     <div class="mb-3">
       <button class="btn btn-primary" type="submit">{{ submitText }}</button>
     </div>
@@ -96,8 +118,12 @@
 import axios from 'axios'
 import useVuelidate from '@vuelidate/core'
 import { required, requiredIf, email, minLength, maxLength, numeric } from '@vuelidate/validators'
+import WorkDay from '../components/WorkDay.vue'
 export default {
   name: 'UserForm',
+  components: {
+    WorkDay
+  },
   props: {
     title: String,
     submitText: String,
@@ -107,10 +133,10 @@ export default {
   setup() {
     return { v$: useVuelidate() }
   },
-  created() {
+  async created() {
     this.fetchVoivodeships()
     if (this.type === 'update') {
-      this.fetchUserData()
+      await this.fetchUserData()
     }
   },
   data() {
@@ -139,7 +165,8 @@ export default {
           street: '',
           houseNum: '',
           flatNum: ''
-        }
+        },
+        workDays: null
       }
     }
   },
@@ -179,6 +206,7 @@ export default {
           await axios.post(`/${this.role}`, this.register, config)
           this.$router.push('/')
         } else if (this.type === 'update') {
+          this.updateWorkDays()
           const userResponse = await axios.put(`/auth/users/${this.$store.getters.uuid}`, this.registerUser)
           const response = await axios.put(`/${this.role}/${this.$store.getters.uuid}`, this.register)
           this.registerUser = userResponse.data
@@ -199,7 +227,7 @@ export default {
     },
     async fetchUserData() {
       try {
-        const response = await axios.get(`/${this.role}/${this.$store.getters.uuid}/with-contact`)
+        const response = await axios.get(`/${this.role}/${this.$store.getters.uuid}/with-contact-and-workdays`)
         this.registerUser = { 
           email: this.$store.getters.email, 
           password: '', 
@@ -215,6 +243,20 @@ export default {
       const isDirty = parent ? this.v$[root][parent][field].$dirty : this.v$[root][field].$dirty
       return isError ? 'is-invalid' : (isDirty ? 'is-valid' : '')
     },
+    getWorkDay(dayValue) {
+      return this.register.workDays.find(workDay => workDay.weekDay == dayValue)
+    },
+    updateWorkDays() {
+      const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+      const workDays = []
+      days.forEach(day => {
+        const workDay = this.$refs[day]
+        if (workDay.isChecked) {
+          workDays.push({ weekDay: workDay.dayValue, startTime: workDay.startTime, endTime: workDay.endTime })
+        }
+      })
+      this.register.workDays = workDays
+    }
   },
 }
 </script>

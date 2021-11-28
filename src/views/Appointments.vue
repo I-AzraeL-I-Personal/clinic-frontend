@@ -28,7 +28,6 @@
         <vue-cal
           active-view="week" 
           :disable-views="['years', 'year', 'month', 'day']"
-          hide-weekends
           :time-from="8 * 60" 
           :time-to="16.25 * 60" 
           :time-step="15"
