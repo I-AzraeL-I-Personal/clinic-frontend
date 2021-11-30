@@ -50,7 +50,7 @@ const notificationMixin = {
   }
 }
 
-axios.defaults.baseURL = process.env.VUE_APP_APIURL
+axios.defaults.baseURL = process.env.API_URL
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.interceptors.request.use(
   config => {
