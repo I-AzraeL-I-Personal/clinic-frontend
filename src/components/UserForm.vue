@@ -166,7 +166,7 @@ export default {
           houseNum: '',
           flatNum: ''
         },
-        workDays: null
+        workDays: []
       }
     }
   },
@@ -206,7 +206,9 @@ export default {
           await axios.post(`/${this.role}`, this.register, config)
           this.$router.push('/')
         } else if (this.type === 'update') {
-          this.updateWorkDays()
+          if (this.role === 'doctor') {
+            this.updateWorkDays()
+          }
           const userResponse = await axios.put(`/auth/users/${this.$store.getters.uuid}`, this.registerUser)
           const response = await axios.put(`/${this.role}/${this.$store.getters.uuid}`, this.register)
           this.registerUser = userResponse.data
@@ -244,7 +246,7 @@ export default {
       return isError ? 'is-invalid' : (isDirty ? 'is-valid' : '')
     },
     getWorkDay(dayValue) {
-      return this.register.workDays.find(workDay => workDay.weekDay == dayValue)
+      return this.register.workDays.find(workDay => workDay.weekDay === dayValue)
     },
     updateWorkDays() {
       const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
