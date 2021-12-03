@@ -83,7 +83,7 @@ export default {
     },
     async downloadFile(type) {
       try {
-        const response = await axios.get(`/appointment/${this.appointmentId}/details/${type}`, { responseType: 'blob' })
+        const response = await axios.get(this.appointmentDetails[type], { responseType: 'blob' })
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
