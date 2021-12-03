@@ -86,7 +86,7 @@
         <div class="invalid-feedback" v-if="v$.register.contact.voivodeship.id.$error">Nie wybrano województwa</div>
       </div>
     </fieldset>
-    <fieldset v-if="role === 'doctor' && register.workDays">
+    <fieldset v-if="role === 'doctor'">
       <legend class="h5">Dni pracy</legend>
       <hr>
       <div class="mb-3">
