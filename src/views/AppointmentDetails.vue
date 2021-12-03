@@ -89,7 +89,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        link.download = this.appointmentDetails[type] + '.' + this.appointmentDetails[type + 'Format']
+        link.download = type + '.' + this.appointmentDetails[type + 'Format']
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
